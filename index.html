@@ -1,1 +1,1193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HDSD – Tạo Phiếu YCTD Trên Hệ Thống Nội Bộ GHN</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ghn-orange: #F37022;
+    --ghn-blue: #1A3C6B;
+    --ghn-blue-light: #2563A8;
+    --ghn-orange-light: #FFF3E8;
+    --ghn-gray: #F5F6F8;
+    --ghn-border: #E2E6EA;
+    --ghn-text: #1E2D3D;
+    --ghn-text-muted: #6B7A8D;
+    --sidebar-w: 260px;
+  }
 
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: #F0F2F5;
+    color: var(--ghn-text);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--ghn-blue);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: transform .3s ease;
+  }
+
+  .sidebar-logo {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-badge {
+    background: var(--ghn-orange);
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-text { line-height: 1.2; }
+  .logo-text strong { color: #fff; font-size: 15px; font-weight: 700; display: block; }
+  .logo-text span { color: rgba(255,255,255,.6); font-size: 10.5px; }
+
+  .sidebar-section-label {
+    padding: 18px 18px 6px;
+    color: rgba(255,255,255,.45);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background .2s, border-color .2s;
+    text-decoration: none;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,.08); }
+
+  .nav-item.active {
+    background: rgba(243,112,34,.18);
+    border-left-color: var(--ghn-orange);
+  }
+
+  .nav-item .nav-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    background: rgba(255,255,255,.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .nav-item.active .nav-icon { background: var(--ghn-orange); }
+
+  .nav-item .nav-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: rgba(255,255,255,.75);
+    line-height: 1.3;
+  }
+
+  .nav-item.active .nav-label { color: #fff; font-weight: 600; }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover-page {
+    background: linear-gradient(135deg, #1A3C6B 0%, #0D2447 60%, #1a1a2e 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover-page::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(243,112,34,.15) 0%, transparent 70%);
+    top: -100px; right: -100px;
+  }
+
+  .cover-page::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(243,112,34,.1) 0%, transparent 70%);
+    bottom: -80px; left: 80px;
+  }
+
+  .cover-inner {
+    max-width: 700px;
+    text-align: center;
+    position: relative; z-index: 1;
+    animation: fadeUp .8s ease both;
+  }
+
+  .cover-logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .cover-logo-badge {
+    background: var(--ghn-orange);
+    color: #fff;
+    font-weight: 900;
+    font-size: 22px;
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .cover-logo-info strong {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    display: block;
+  }
+
+  .cover-logo-info span {
+    color: rgba(255,255,255,.55);
+    font-size: 12px;
+  }
+
+  .cover-tag {
+    display: inline-block;
+    background: rgba(243,112,34,.2);
+    border: 1px solid rgba(243,112,34,.4);
+    color: var(--ghn-orange);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }
+
+  .cover-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--ghn-orange);
+    line-height: 1.2;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: -.3px;
+  }
+
+  .cover-subtitle {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.35;
+    margin-bottom: 32px;
+  }
+
+  .cover-date {
+    display: inline-block;
+    background: var(--ghn-orange);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px 32px;
+    border-radius: 30px;
+    margin-bottom: 40px;
+  }
+
+  .cover-cards {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .cover-card {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
+    padding: 16px 22px;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+    min-width: 200px;
+    max-width: 220px;
+    text-decoration: none;
+  }
+
+  .cover-card:hover {
+    background: rgba(243,112,34,.2);
+    border-color: var(--ghn-orange);
+    transform: translateY(-3px);
+  }
+
+  .cover-card-num {
+    font-size: 11px;
+    color: var(--ghn-orange);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .cover-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.4;
+  }
+
+  /* ── CONTENT PAGES ── */
+  .content-wrapper {
+    padding: 40px 48px;
+    max-width: 960px;
+  }
+
+  /* Section header */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--ghn-border);
+  }
+
+  .section-num {
+    width: 48px; height: 48px;
+    background: var(--ghn-orange);
+    color: #fff;
+    font-weight: 800;
+    font-size: 20px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .section-title { font-size: 22px; font-weight: 800; color: var(--ghn-blue); line-height: 1.3; }
+
+  /* Page title bar */
+  .page-titlebar {
+    background: #fff;
+    border-bottom: 3px solid var(--ghn-orange);
+    padding: 22px 48px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  }
+
+  .page-titlebar-icon {
+    width: 36px; height: 36px;
+    background: var(--ghn-orange);
+    color: #fff;
+    font-size: 17px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .page-titlebar h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ghn-blue);
+  }
+
+  /* Steps */
+  .step-block {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    border: 1px solid var(--ghn-border);
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    animation: fadeUp .5s ease both;
+  }
+
+  .step-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .step-badge {
+    background: var(--ghn-blue);
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ghn-blue);
+    line-height: 1.4;
+  }
+
+  .step-desc {
+    font-size: 13.5px;
+    color: var(--ghn-text);
+    line-height: 1.75;
+  }
+
+  .step-desc a {
+    color: var(--ghn-orange);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .step-desc a:hover { text-decoration: underline; }
+
+  /* Note list */
+  .note-list {
+    background: var(--ghn-orange-light);
+    border-left: 4px solid var(--ghn-orange);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin-top: 14px;
+  }
+
+  .note-list-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ghn-orange);
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .note-list ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .note-list ul li {
+    font-size: 13.5px;
+    color: var(--ghn-text);
+    padding: 4px 0 4px 18px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .note-list ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--ghn-orange);
+    font-size: 11px;
+    top: 6px;
+  }
+
+  .note-list ul li strong { color: var(--ghn-blue); }
+
+  /* Sub-list (nested) */
+  .note-list ul li ul {
+    margin-top: 4px;
+    margin-left: 12px;
+  }
+
+  .note-list ul li ul li::before { content: '–'; color: var(--ghn-text-muted); }
+
+  /* Info card / form mockup */
+  .form-mock {
+    background: #F8FAFC;
+    border: 1px solid var(--ghn-border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-top: 14px;
+  }
+
+  .form-mock-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ghn-blue-light);
+    border-left: 3px solid var(--ghn-orange);
+    padding-left: 8px;
+    margin-bottom: 14px;
+    letter-spacing: .4px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .form-field { display: flex; flex-direction: column; gap: 4px; }
+
+  .form-field label {
+    font-size: 11px;
+    color: var(--ghn-text-muted);
+    font-weight: 600;
+  }
+
+  .form-field .field-val {
+    background: #fff;
+    border: 1px solid var(--ghn-border);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--ghn-text);
+    font-weight: 500;
+  }
+
+  .form-field .field-val.highlight {
+    border-color: var(--ghn-orange);
+    color: var(--ghn-blue);
+    font-weight: 700;
+  }
+
+  /* Approval chain */
+  .approval-chain {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  .approval-node {
+    background: #fff;
+    border: 1.5px solid var(--ghn-border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: center;
+    min-width: 130px;
+  }
+
+  .approval-node .role {
+    font-size: 10px;
+    color: var(--ghn-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 4px;
+  }
+
+  .approval-node .person {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ghn-blue);
+  }
+
+  .approval-arrow {
+    color: var(--ghn-orange);
+    font-size: 20px;
+    margin: 0 6px;
+    font-weight: 300;
+  }
+
+  /* Tags / chips */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(37,99,168,.1);
+    color: var(--ghn-blue-light);
+    border: 1px solid rgba(37,99,168,.2);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 11px;
+    margin: 3px 2px;
+  }
+
+  .chip .x { color: var(--ghn-text-muted); margin-left: 5px; font-size: 11px; }
+
+  /* Divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--ghn-orange) 0%, transparent 100%);
+    margin: 40px 0;
+    opacity: .3;
+  }
+
+  /* TOC page */
+  .toc-page { padding: 40px 48px; }
+
+  .toc-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid var(--ghn-border);
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--ghn-gray);
+    cursor: pointer;
+    text-decoration: none;
+    transition: color .2s;
+  }
+
+  .toc-item:last-child { border-bottom: none; }
+  .toc-item:hover .toc-item-title { color: var(--ghn-orange); }
+
+  .toc-num {
+    width: 36px; height: 36px;
+    background: var(--ghn-orange);
+    color: #fff;
+    font-weight: 800;
+    font-size: 14px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .toc-item-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ghn-blue);
+    transition: color .2s;
+  }
+
+  .toc-item-sub {
+    font-size: 12px;
+    color: var(--ghn-text-muted);
+    margin-top: 2px;
+  }
+
+  /* Footer strip */
+  .page-footer {
+    background: var(--ghn-blue);
+    color: rgba(255,255,255,.5);
+    font-size: 11px;
+    text-align: center;
+    padding: 14px;
+    margin-top: auto;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── PAGE SYSTEM ── */
+  .page { display: none; flex-direction: column; min-height: 100vh; }
+  .page.active { display: flex; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    .cover-title { font-size: 26px; }
+    .cover-subtitle { font-size: 17px; }
+    .content-wrapper { padding: 24px 20px; }
+    .page-titlebar { padding: 16px 20px; }
+    .form-row { grid-template-columns: 1fr; }
+    .approval-chain { flex-direction: column; align-items: flex-start; }
+    .approval-arrow { transform: rotate(90deg); }
+  }
+
+  .hamburger {
+    display: none;
+    position: fixed;
+    top: 14px; left: 14px;
+    z-index: 200;
+    background: var(--ghn-orange);
+    border: none;
+    color: #fff;
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    font-size: 18px;
+    cursor: pointer;
+    align-items: center; justify-content: center;
+  }
+
+  @media (max-width: 768px) { .hamburger { display: flex; } }
+
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 99;
+  }
+  .overlay.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Hamburger -->
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">GHN</div>
+    <div class="logo-text">
+      <strong>GiaoHangNhanh</strong>
+      <span>Giao Siêu Nhanh, Giá Siêu Tốt</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section-label">Điều hướng</div>
+
+  <a class="nav-item active" href="#" onclick="showPage('cover',this)">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Trang bìa</div>
+  </a>
+  <a class="nav-item" href="#" onclick="showPage('toc',this)">
+    <div class="nav-icon">📋</div>
+    <div class="nav-label">Mục lục</div>
+  </a>
+
+  <div class="sidebar-section-label">Quy trình</div>
+
+  <a class="nav-item" href="#" onclick="showPage('proc1',this)">
+    <div class="nav-icon">01</div>
+    <div class="nav-label">YCTD Hàng Loạt (Mass Recruitment)</div>
+  </a>
+  <a class="nav-item" href="#" onclick="showPage('proc2',this)">
+    <div class="nav-icon">02</div>
+    <div class="nav-label">Ký HĐ Điện Tử – NV Mới (Khối Vùng)</div>
+  </a>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- ══ COVER PAGE ══ -->
+  <div class="page active" id="page-cover">
+    <div class="cover-page">
+      <div class="cover-inner">
+        <div class="cover-logo-row">
+          <div class="cover-logo-badge">GHN</div>
+          <div class="cover-logo-info">
+            <strong>GiaoHangNhanh</strong>
+            <span>Giao Siêu Nhanh, Giá Siêu Tốt</span>
+          </div>
+        </div>
+        <div class="cover-tag">Hướng dẫn sử dụng</div>
+        <div class="cover-title">Tạo Phiếu YCTD</div>
+        <div class="cover-subtitle">Trên Hệ Thống Nội Bộ<br>Dành cho Vận Hành & HRBP</div>
+        <div class="cover-date">Tháng 6 – 2026</div>
+        <div class="cover-cards">
+          <a class="cover-card" href="#" onclick="showPage('proc1', null)">
+            <div class="cover-card-num">QUY TRÌNH 01</div>
+            <div class="cover-card-title">YCTD Hàng Loạt<br>(Mass Recruitment)</div>
+          </a>
+          <a class="cover-card" href="#" onclick="showPage('proc2', null)">
+            <div class="cover-card-num">QUY TRÌNH 02</div>
+            <div class="cover-card-title">Ký HĐ Điện Tử<br>NV Mới – Khối Vùng</div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="page-footer">© 2026 GiaoHangNhanh – Tài liệu nội bộ, không phát tán ra ngoài</div>
+  </div>
+
+  <!-- ══ TOC PAGE ══ -->
+  <div class="page" id="page-toc">
+    <div class="page-titlebar">
+      <div class="page-titlebar-icon">📋</div>
+      <h1>Mục Lục</h1>
+    </div>
+    <div class="toc-page">
+      <div class="toc-card">
+        <a class="toc-item" href="#" onclick="showPage('proc1',null)">
+          <div class="toc-num">01</div>
+          <div>
+            <div class="toc-item-title">[HRBP] Yêu Cầu Tuyển Dụng Hàng Loạt (Mass Recruitment)</div>
+            <div class="toc-item-sub">4 bước · Tạo phiếu → Điền thông tin → Gán vòng duyệt</div>
+          </div>
+        </a>
+        <a class="toc-item" href="#" onclick="showPage('proc2',null)">
+          <div class="toc-num">02</div>
+          <div>
+            <div class="toc-item-title">[HRBP] Đề Nghị Ký Hợp Đồng Điện Tử Cho NV Mới – Dành Riêng Cho Khối Vùng</div>
+            <div class="toc-item-sub">5 bước · Upload thông tin ứng viên → Theo dõi → Hoàn tất</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="page-footer">© 2026 GiaoHangNhanh – Tài liệu nội bộ, không phát tán ra ngoài</div>
+  </div>
+
+  <!-- ══ PROCESS 1 ══ -->
+  <div class="page" id="page-proc1">
+    <div class="page-titlebar">
+      <div class="page-titlebar-icon">01</div>
+      <h1>[HRBP] Yêu Cầu Tuyển Dụng Hàng Loạt (Mass Recruitment)</h1>
+    </div>
+
+    <div class="content-wrapper">
+
+      <!-- Step 1 -->
+      <div class="step-block" style="animation-delay:.05s">
+        <div class="step-head">
+          <div class="step-badge">Bước 1</div>
+          <div class="step-title">Truy cập hệ thống và tạo phiếu</div>
+        </div>
+        <div class="step-desc">
+          Truy cập vào <a href="#">noibo</a> &nbsp;→&nbsp; chọn <strong>Tạo phiếu</strong> ở menu chính.
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-block" style="animation-delay:.1s">
+        <div class="step-head">
+          <div class="step-badge">Bước 2</div>
+          <div class="step-title">Chọn quy trình tuyển dụng</div>
+        </div>
+        <div class="step-desc">
+          Chọn <strong>Quy trình nhân lực</strong> &nbsp;→&nbsp; Chọn
+          <strong>[HRBP] Yêu Cầu Tuyển Dụng Hàng Loạt (Mass Recruitment)</strong>
+        </div>
+        <div class="form-mock">
+          <div class="form-mock-title">Ảnh minh hoạ – Chi tiết phiếu</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Nhóm quy trình</label>
+              <div class="field-val">Quy trình Nhân Lực</div>
+            </div>
+            <div class="form-field">
+              <label>Quy trình</label>
+              <div class="field-val highlight">[HRBP] Yêu cầu tuyển dụng hàng loạt (Mass Recruitment)</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>MSNV Người Yêu Cầu</label>
+              <div class="field-val">3108417 – Nguyễn Viễn Vân</div>
+            </div>
+            <div class="form-field">
+              <label>Tên Người Yêu Cầu</label>
+              <div class="field-val">Nguyễn Viễn Vân</div>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Phòng Ban Người Yêu Cầu</label>
+            <div class="field-val">21287000 – Bưu Cục Phạm Hùng – Phước Long – Bình Phước</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-block" style="animation-delay:.15s">
+        <div class="step-head">
+          <div class="step-badge">Bước 3</div>
+          <div class="step-title">Điền thông tin (lưu ý quan trọng)</div>
+        </div>
+        <div class="step-desc">Điền đầy đủ thông tin trong danh sách cần tuyển dụng:</div>
+
+        <div class="form-mock" style="margin-bottom:14px;">
+          <div class="form-mock-title">Danh sách cần tuyển dụng</div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+              <thead>
+                <tr style="background:var(--ghn-gray);">
+                  <th style="padding:8px 10px;text-align:left;color:var(--ghn-text-muted);font-weight:600;border-bottom:1px solid var(--ghn-border);">STT</th>
+                  <th style="padding:8px 10px;text-align:left;color:var(--ghn-text-muted);font-weight:600;border-bottom:1px solid var(--ghn-border);">Địa điểm cần tuyển</th>
+                  <th style="padding:8px 10px;text-align:left;color:var(--ghn-text-muted);font-weight:600;border-bottom:1px solid var(--ghn-border);">Chức danh cần tuyển</th>
+                  <th style="padding:8px 10px;text-align:center;color:var(--ghn-text-muted);font-weight:600;border-bottom:1px solid var(--ghn-border);">SL đang làm việc</th>
+                  <th style="padding:8px 10px;text-align:center;color:var(--ghn-text-muted);font-weight:600;border-bottom:1px solid var(--ghn-border);">SL sắp nghỉ việc</th>
+                  <th style="padding:8px 10px;text-align:center;color:var(--ghn-text-muted);font-weight:600;border-bottom:1px solid var(--ghn-border);">SL cần tuyển</th>
+                  <th style="padding:8px 10px;text-align:center;color:var(--ghn-text-muted);font-weight:600;border-bottom:1px solid var(--ghn-border);">SL dự phòng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:8px 10px;color:var(--ghn-text);">1</td>
+                  <td style="padding:8px 10px;color:var(--ghn-blue-light);font-weight:500;">21287000 – Bưu Cục Phạm Hùng</td>
+                  <td style="padding:8px 10px;color:var(--ghn-blue-light);font-weight:500;">VT222 – NV Phát Triển Thị Trường</td>
+                  <td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--ghn-blue);">23</td>
+                  <td style="padding:8px 10px;text-align:center;">0</td>
+                  <td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--ghn-orange);">1</td>
+                  <td style="padding:8px 10px;text-align:center;">0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="note-list">
+          <div class="note-list-title">⚠️ Lưu ý khi điền thông tin</div>
+          <ul>
+            <li>Điền <strong>tên bưu cục</strong> chính xác theo danh sách hệ thống</li>
+            <li><strong>Chức danh</strong> được phép chọn:
+              <ul>
+                <li>VT222 – Nhân viên phát triển thị trường</li>
+                <li>VT226 – Nhân viên xử lý</li>
+              </ul>
+            </li>
+            <li><strong>Số lượng đang làm việc:</strong> điền theo thực tế tại bưu cục</li>
+            <li>Số lượng nhân viên sắp nghỉ: điền thực tế</li>
+            <li><strong>Số lượng cần tuyển: luôn điền 1</strong> – muốn tuyển 2 thì tạo 2 phiếu riêng</li>
+            <li><strong>Số lượng cần tuyển dự phòng: 0</strong></li>
+            <li><strong>Tổng số lượng cần tuyển: 1</strong></li>
+            <li><strong>Thời gian cần có:</strong> Cộng thêm 10 ngày so với ngày hiện tại</li>
+            <li>Nhắn gửi đến HRBP: tuỳ chỉnh theo nhu cầu</li>
+          </ul>
+        </div>
+
+        <div class="form-mock" style="margin-top:14px;">
+          <div class="form-mock-title">Tổng hợp thông tin</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Tổng số lượng cần tuyển</label>
+              <div class="field-val highlight">1</div>
+            </div>
+            <div class="form-field">
+              <label>Thời gian cần có</label>
+              <div class="field-val highlight">Ngày hiện tại + 10 ngày</div>
+            </div>
+          </div>
+          <div class="form-field" style="margin-top:10px;">
+            <label>Vòng Gán Nhân Viên Phụ Trách Tuyển Dụng</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:6px;">
+              <div style="background:#fff;border:1.5px solid var(--ghn-orange);border-radius:9px;padding:12px 14px;">
+                <div style="font-size:11px;font-weight:700;color:var(--ghn-orange);margin-bottom:5px;letter-spacing:.5px;">📍 LONG AN – TÂY NINH</div>
+                <div style="font-size:13px;font-weight:700;color:var(--ghn-blue);">HRBP Quang Nhật</div>
+              </div>
+              <div style="background:#fff;border:1.5px solid var(--ghn-orange);border-radius:9px;padding:12px 14px;">
+                <div style="font-size:11px;font-weight:700;color:var(--ghn-orange);margin-bottom:5px;letter-spacing:.5px;">📍 BÌNH PHƯỚC</div>
+                <div style="font-size:13px;font-weight:700;color:var(--ghn-blue);">HRBP Cẩm Hồng</div>
+              </div>
+              <div style="background:#fff;border:1.5px solid var(--ghn-orange);border-radius:9px;padding:12px 14px;">
+                <div style="font-size:11px;font-weight:700;color:var(--ghn-orange);margin-bottom:5px;letter-spacing:.5px;">📍 ĐỒNG NAI</div>
+                <div style="font-size:13px;font-weight:600;color:var(--ghn-blue);line-height:1.6;">HRBP Lệ Nga<br>HRBP Thanh Hằng<br>HRBP Phương Uyên</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-block" style="animation-delay:.2s">
+        <div class="step-head">
+          <div class="step-badge">Bước 4</div>
+          <div class="step-title">Hoàn tất và gán vòng duyệt</div>
+        </div>
+        <div class="step-desc" style="margin-bottom:14px;">
+          Chỉ định người duyệt trước khi nhấn <strong>Tạo phiếu</strong>. Lưu ý: khi thoát, mọi thông tin sẽ không được lưu lại.
+        </div>
+
+        <div class="note-list">
+          <div class="note-list-title">👥 Chuỗi người duyệt</div>
+          <ul>
+            <li><strong>Cấp trên trực tiếp:</strong> tuỳ bưu cục (chọn đúng quản lý trực tiếp)</li>
+            <li><strong>HRBP:</strong> 3006537 – Nguyễn Quốc Thái</li>
+            <li><strong>NV Phụ trách:</strong> gán theo khu vực bưu cục:
+              <ul>
+                <li>Long An – Tây Ninh → <strong>HRBP Quang Nhật</strong></li>
+                <li>Bình Phước → <strong>HRBP Cẩm Hồng</strong></li>
+                <li>Đồng Nai → <strong>HRBP Lệ Nga / Thanh Hằng / Phương Uyên</strong></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="approval-chain" style="margin-top:18px;">
+          <div class="approval-node">
+            <div class="role">Cấp trên trực tiếp</div>
+            <div class="person">Tuỳ bưu cục</div>
+          </div>
+          <div class="approval-arrow">→</div>
+          <div class="approval-node">
+            <div class="role">HRBP</div>
+            <div class="person">3006537 – Nguyễn Quốc Thái</div>
+          </div>
+          <div class="approval-arrow">→</div>
+          <div class="approval-node" style="min-width:160px;">
+            <div class="role">NV Phụ trách (theo khu vực)</div>
+            <div class="person" style="font-size:11.5px;line-height:1.6;">Long An/TN → Quang Nhật<br>Bình Phước → Cẩm Hồng<br>Đồng Nai → Lệ Nga/Thanh Hằng/Phương Uyên</div>
+          </div>
+        </div>
+
+        <div style="margin-top:18px;text-align:right;">
+          <span style="display:inline-block;background:var(--ghn-orange);color:#fff;font-weight:700;font-size:14px;padding:10px 28px;border-radius:8px;cursor:default;">Tạo phiếu ✓</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="page-footer">© 2026 GiaoHangNhanh – Tài liệu nội bộ</div>
+  </div>
+
+  <!-- ══ PROCESS 2 ══ -->
+  <div class="page" id="page-proc2">
+    <div class="page-titlebar">
+      <div class="page-titlebar-icon">02</div>
+      <h1>[HRBP] Đề Nghị Ký HĐ Điện Tử Cho NV Mới – Dành Riêng Cho Khối Vùng</h1>
+    </div>
+
+    <div class="content-wrapper">
+
+      <!-- Step 1 -->
+      <div class="step-block" style="animation-delay:.05s">
+        <div class="step-head">
+          <div class="step-badge">Bước 1</div>
+          <div class="step-title">Truy cập hệ thống và tạo phiếu</div>
+        </div>
+        <div class="step-desc">
+          Truy cập vào <a href="#">noibo</a> &nbsp;→&nbsp; chọn <strong>Tạo phiếu</strong>.
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-block" style="animation-delay:.1s">
+        <div class="step-head">
+          <div class="step-badge">Bước 2</div>
+          <div class="step-title">Chọn quy trình ký hợp đồng</div>
+        </div>
+        <div class="step-desc">
+          Chọn <strong>Quy trình nhân lực</strong> &nbsp;→&nbsp; Chọn
+          <strong>[HRBP] Đề Nghị Ký Hợp Đồng Điện Tử Cho NV Mới – Dành Riêng Cho Khối Vùng</strong>
+        </div>
+
+        <div class="form-mock">
+          <div class="form-mock-title">Thông tin người tuyển dụng</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Nhóm quy trình</label>
+              <div class="field-val">Quy trình Nhân Lực</div>
+            </div>
+            <div class="form-field">
+              <label>Quy trình</label>
+              <div class="field-val highlight">[HRBP] Đề nghị ký hợp đồng điện tử cho NV mới – dành riêng cho khối Vùng</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>MSNV Người Yêu Cầu</label>
+              <div class="field-val">(Nhập giá trị)</div>
+            </div>
+            <div class="form-field">
+              <label>Họ Tên Người Yêu Cầu</label>
+              <div class="field-val">(Tự động điền)</div>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Phòng Ban Người Yêu Cầu</label>
+            <div class="field-val">(Tự động điền)</div>
+          </div>
+        </div>
+
+        <div class="note-list" style="margin-top:14px;">
+          <div class="note-list-title">⚠️ Lưu ý</div>
+          <ul>
+            <li>Điền <strong>đầy đủ và đúng thông tin phòng ban</strong> của người yêu cầu tuyển dụng</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-block" style="animation-delay:.15s">
+        <div class="step-head">
+          <div class="step-badge">Bước 3</div>
+          <div class="step-title">Upload thông tin của ứng viên</div>
+        </div>
+
+        <div class="form-mock">
+          <div class="form-mock-title">Upload file thông tin nhân viên</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>CCCD_Upload thông tin nhân viên ✱</label>
+              <div class="field-val" style="color:var(--ghn-text-muted);">📎 Chọn files</div>
+            </div>
+            <div class="form-field">
+              <label>Chân dung_Upload thông tin nhân viên ✱</label>
+              <div class="field-val" style="color:var(--ghn-text-muted);">📎 Chọn files</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Thông tin VNeID_Upload thông tin nhân viên ✱</label>
+              <div class="field-val" style="color:var(--ghn-text-muted);">📎 Chọn files</div>
+            </div>
+            <div class="form-field">
+              <label>Số lượng HĐ mới ✱</label>
+              <div class="field-val highlight" style="color:var(--ghn-orange);">= Số lượng hồ sơ ứng viên</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-list" style="margin-top:14px;">
+          <div class="note-list-title">📁 Yêu cầu upload</div>
+          <ul>
+            <li>Up <strong>đầy đủ các file</strong>: ảnh + sheet tổng hợp</li>
+            <li><strong>Số lượng HĐ mới:</strong> điền đúng <strong>số lượng hồ sơ ứng viên</strong> cần ký hợp đồng (bao nhiêu hồ sơ thì điền bấy nhiêu)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-block" style="animation-delay:.2s">
+        <div class="step-head">
+          <div class="step-badge">Bước 4</div>
+          <div class="step-title">Thêm HRBP Phụ trách vào danh sách người theo dõi</div>
+        </div>
+        <div class="step-desc" style="margin-bottom:12px;">
+          Tìm và thêm HRBP phụ trách khu vực vào danh sách <strong>Người theo dõi</strong>. Danh sách này đã bao gồm người duyệt và người tạo phiếu.
+        </div>
+
+        <div class="form-mock">
+          <div class="form-mock-title">Danh sách người theo dõi</div>
+          <div style="padding:10px 0;">
+            <span class="chip">3014059 – Phạm Thị Cẩm Nhung <span class="x">✕</span></span>
+            <span class="chip">3045604 – Huỳnh Thị Thuỳ Linh <span class="x">✕</span></span>
+            <span class="chip">3041836 – Phạm Thị Ánh Giàu <span class="x">✕</span></span>
+          </div>
+        </div>
+
+        <div class="note-list" style="margin-top:14px;">
+          <div class="note-list-title">⚠️ Lưu ý</div>
+          <ul>
+            <li>Đảm bảo <strong>HRBP phụ trách khu vực</strong> đã có trong danh sách người theo dõi trước khi hoàn tất</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-block" style="animation-delay:.25s">
+        <div class="step-head">
+          <div class="step-badge">Bước 5</div>
+          <div class="step-title">Hoàn tất – Gán vòng duyệt và tạo phiếu</div>
+        </div>
+        <div class="step-desc" style="margin-bottom:14px;">
+          Chỉ định người duyệt trước khi nhấn <strong>Tạo phiếu</strong>. Lưu ý: khi thoát, mọi thông tin sẽ không được lưu lại.
+        </div>
+
+        <div class="form-mock">
+          <div class="form-mock-title">Chỉ định người duyệt</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Trưởng Phòng Ban Duyệt (Cấp trên trực tiếp)</label>
+              <div class="field-val highlight">3006537 – Nguyễn Quốc Thái</div>
+            </div>
+            <div class="form-field">
+              <label>Nhân viên tuyển dụng hoàn tất tạo HĐ điện tử</label>
+              <div class="field-val highlight">3045604 – Huỳnh Thị Thuỳ Linh</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-list" style="margin-top:14px;">
+          <div class="note-list-title">👥 Chuỗi người duyệt</div>
+          <ul>
+            <li><strong>Gán vòng duyệt cho quản lý trực tiếp</strong> của người yêu cầu</li>
+            <li><strong>Gán vòng duyệt cho HRBP Specialist:</strong> 3045604 – Huỳnh Thị Thuỳ Linh</li>
+          </ul>
+        </div>
+
+        <div class="approval-chain" style="margin-top:18px;">
+          <div class="approval-node">
+            <div class="role">Quản lý trực tiếp</div>
+            <div class="person">Tuỳ đơn vị</div>
+          </div>
+          <div class="approval-arrow">→</div>
+          <div class="approval-node">
+            <div class="role">HRBP Specialist</div>
+            <div class="person">3045604 – Huỳnh Thị Thuỳ Linh</div>
+          </div>
+        </div>
+
+        <div style="margin-top:18px;text-align:right;">
+          <span style="display:inline-block;background:var(--ghn-orange);color:#fff;font-weight:700;font-size:14px;padding:10px 28px;border-radius:8px;cursor:default;">Tạo phiếu ✓</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="page-footer">© 2026 GiaoHangNhanh – Tài liệu nội bộ</div>
+  </div>
+
+</div><!-- /#main -->
+
+<script>
+function showPage(id, navEl) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+
+  // Update nav active
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) {
+    navEl.classList.add('active');
+  } else {
+    // Auto-highlight based on id
+    const map = { cover:'nav-cover', toc:'nav-toc', proc1:'nav-proc1', proc2:'nav-proc2' };
+    document.querySelectorAll('.nav-item').forEach((el, i) => {
+      const icons = ['🏠','📋','01','02'];
+      const icon = el.querySelector('.nav-icon');
+      if (icon) {
+        if ((id === 'cover' && icon.textContent.trim() === '🏠') ||
+            (id === 'toc'   && icon.textContent.trim() === '📋') ||
+            (id === 'proc1' && icon.textContent.trim() === '01') ||
+            (id === 'proc2' && icon.textContent.trim() === '02')) {
+          el.classList.add('active');
+        }
+      }
+    });
+  }
+
+  window.scrollTo(0, 0);
+  closeSidebar();
+  return false;
+}
+
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('overlay');
+  s.classList.toggle('open');
+  o.classList.toggle('show');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+</script>
+</body>
+</html>
