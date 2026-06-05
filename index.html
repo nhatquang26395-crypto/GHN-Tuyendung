@@ -8,21 +8,24 @@
 <style>
   :root {
     --ghn-orange: #F37022;
+    --ghn-orange-dark: #D95F10;
+    --ghn-orange-mid: #FF8C3A;
     --ghn-blue: #1A3C6B;
     --ghn-blue-light: #2563A8;
-    --ghn-orange-light: #FFF3E8;
-    --ghn-gray: #F5F6F8;
-    --ghn-border: #E2E6EA;
-    --ghn-text: #1E2D3D;
+    --ghn-blue-mid: #1E5598;
+    --ghn-orange-light: #FFF4EC;
+    --ghn-gray: #F4F6FA;
+    --ghn-border: #E4E9F0;
+    --ghn-text: #18283E;
     --ghn-text-muted: #6B7A8D;
-    --sidebar-w: 260px;
+    --sidebar-w: 268px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: 'Be Vietnam Pro', sans-serif;
-    background: #F0F2F5;
+    background: #EEF2F8;
     color: var(--ghn-text);
     display: flex;
     min-height: 100vh;
@@ -32,7 +35,7 @@
   #sidebar {
     width: var(--sidebar-w);
     min-height: 100vh;
-    background: var(--ghn-blue);
+    background: linear-gradient(180deg, #0D2447 0%, #1A3C6B 50%, #1E5598 100%);
     position: fixed;
     top: 0; left: 0;
     display: flex;
@@ -42,7 +45,7 @@
   }
 
   .sidebar-logo {
-    padding: 20px 18px 16px;
+    padding: 16px 18px 14px;
     border-bottom: 1px solid rgba(255,255,255,.12);
     display: flex;
     align-items: center;
@@ -87,7 +90,7 @@
   .nav-item:hover { background: rgba(255,255,255,.08); }
 
   .nav-item.active {
-    background: rgba(243,112,34,.18);
+    background: linear-gradient(90deg, rgba(243,112,34,.2) 0%, rgba(243,112,34,.08) 100%);
     border-left-color: var(--ghn-orange);
   }
 
@@ -122,7 +125,7 @@
 
   /* ── COVER PAGE ── */
   .cover-page {
-    background: linear-gradient(135deg, #1A3C6B 0%, #0D2447 60%, #1a1a2e 100%);
+    background: linear-gradient(140deg, #0D2447 0%, #1A3C6B 40%, #1E5598 75%, #0D2447 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -221,13 +224,15 @@
 
   .cover-date {
     display: inline-block;
-    background: var(--ghn-orange);
+    background: linear-gradient(135deg, var(--ghn-orange) 0%, var(--ghn-orange-dark) 100%);
     color: #fff;
     font-weight: 700;
     font-size: 15px;
     padding: 10px 32px;
     border-radius: 30px;
     margin-bottom: 40px;
+    box-shadow: 0 4px 16px rgba(243,112,34,.4);
+    letter-spacing: .3px;
   }
 
   .cover-cards {
@@ -290,13 +295,14 @@
 
   .section-num {
     width: 48px; height: 48px;
-    background: var(--ghn-orange);
+    background: linear-gradient(135deg, var(--ghn-orange) 0%, var(--ghn-orange-dark) 100%);
     color: #fff;
     font-weight: 800;
     font-size: 20px;
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(243,112,34,.35);
   }
 
   .section-title { font-size: 22px; font-weight: 800; color: var(--ghn-blue); line-height: 1.3; }
@@ -305,14 +311,14 @@
   .page-titlebar {
     background: #fff;
     border-bottom: 3px solid var(--ghn-orange);
-    padding: 22px 48px;
+    padding: 18px 48px;
     display: flex;
     align-items: center;
     gap: 14px;
     position: sticky;
     top: 0;
     z-index: 50;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    box-shadow: 0 2px 16px rgba(26,60,107,.1);
   }
 
   .page-titlebar-icon {
@@ -333,12 +339,16 @@
   /* Steps */
   .step-block {
     background: #fff;
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 28px 32px;
     margin-bottom: 20px;
     border: 1px solid var(--ghn-border);
-    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    box-shadow: 0 3px 12px rgba(26,60,107,.07), 0 1px 3px rgba(0,0,0,.04);
     animation: fadeUp .5s ease both;
+    transition: box-shadow .2s;
+  }
+  .step-block:hover {
+    box-shadow: 0 6px 20px rgba(26,60,107,.12), 0 1px 3px rgba(0,0,0,.05);
   }
 
   .step-head {
@@ -349,15 +359,17 @@
   }
 
   .step-badge {
-    background: var(--ghn-blue);
+    background: linear-gradient(135deg, var(--ghn-blue) 0%, var(--ghn-blue-mid) 100%);
     color: #fff;
     font-weight: 700;
     font-size: 12px;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 20px;
     white-space: nowrap;
     flex-shrink: 0;
     margin-top: 2px;
+    letter-spacing: .3px;
+    box-shadow: 0 2px 6px rgba(26,60,107,.25);
   }
 
   .step-title {
@@ -383,7 +395,7 @@
 
   /* Note list */
   .note-list {
-    background: var(--ghn-orange-light);
+    background: linear-gradient(135deg, #FFF4EC 0%, #FFF9F5 100%);
     border-left: 4px solid var(--ghn-orange);
     border-radius: 0 10px 10px 0;
     padding: 16px 20px;
@@ -494,12 +506,13 @@
   }
 
   .approval-node {
-    background: #fff;
-    border: 1.5px solid var(--ghn-border);
-    border-radius: 10px;
-    padding: 10px 16px;
+    background: linear-gradient(135deg, #fff 0%, #F9FBFF 100%);
+    border: 1.5px solid #D0DCF0;
+    border-radius: 12px;
+    padding: 12px 16px;
     text-align: center;
     min-width: 130px;
+    box-shadow: 0 2px 8px rgba(26,60,107,.06);
   }
 
   .approval-node .role {
@@ -519,9 +532,10 @@
 
   .approval-arrow {
     color: var(--ghn-orange);
-    font-size: 20px;
-    margin: 0 6px;
-    font-weight: 300;
+    font-size: 22px;
+    margin: 0 8px;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(243,112,34,.3);
   }
 
   /* Tags / chips */
@@ -553,10 +567,10 @@
 
   .toc-card {
     background: #fff;
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 32px;
     border: 1px solid var(--ghn-border);
-    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    box-shadow: 0 4px 16px rgba(26,60,107,.08);
   }
 
   .toc-item {
@@ -575,13 +589,14 @@
 
   .toc-num {
     width: 36px; height: 36px;
-    background: var(--ghn-orange);
+    background: linear-gradient(135deg, var(--ghn-orange) 0%, var(--ghn-orange-dark) 100%);
     color: #fff;
     font-weight: 800;
     font-size: 14px;
     border-radius: 9px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(243,112,34,.3);
   }
 
   .toc-item-title {
@@ -599,12 +614,13 @@
 
   /* Footer strip */
   .page-footer {
-    background: var(--ghn-blue);
+    background: linear-gradient(135deg, #0D2447 0%, #1A3C6B 100%);
     color: rgba(255,255,255,.5);
     font-size: 11px;
     text-align: center;
-    padding: 14px;
+    padding: 16px;
     margin-top: auto;
+    border-top: 2px solid var(--ghn-orange);
   }
 
   /* Animations */
@@ -890,25 +906,57 @@
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:6px;">
               <div style="background:#fff;border:1.5px solid var(--ghn-orange);border-radius:9px;padding:12px 14px;">
                 <div style="font-size:11px;font-weight:700;color:var(--ghn-orange);margin-bottom:5px;letter-spacing:.5px;">📍 LONG AN – TÂY NINH</div>
-                <div style="font-size:13px;font-weight:700;color:var(--ghn-blue);">HRBP 3119684 Quang Nhật</div>
+                <div style="font-size:13px;font-weight:700;color:var(--ghn-blue);">3119684 – Quang Nhật</div>
               </div>
               <div style="background:#fff;border:1.5px solid var(--ghn-orange);border-radius:9px;padding:12px 14px;">
                 <div style="font-size:11px;font-weight:700;color:var(--ghn-orange);margin-bottom:5px;letter-spacing:.5px;">📍 BÌNH PHƯỚC</div>
-                <div style="font-size:13px;font-weight:700;color:var(--ghn-blue);">HRBP 3168363 Cẩm Hồng</div>
+                <div style="font-size:13px;font-weight:700;color:var(--ghn-blue);">3168363 – Cẩm Hồng</div>
               </div>
               <div style="background:#fff;border:1.5px solid var(--ghn-orange);border-radius:9px;padding:12px 14px;">
                 <div style="font-size:11px;font-weight:700;color:var(--ghn-orange);margin-bottom:5px;letter-spacing:.5px;">📍 ĐỒNG NAI</div>
-                <div style="font-size:13px;font-weight:600;color:var(--ghn-blue);line-height:1.6;">HRBP 3168673 Lệ Nga<br>HRBP 3110648 Thanh Hằng<br>HRBP 3172144 Phương Uyên</div>
+                <div style="font-size:13px;font-weight:600;color:var(--ghn-blue);line-height:1.6;">3168673 – Lệ Nga<br>3110648 – Thanh Hằng<br>3172144 – Phương Uyên</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Step 3b: Người theo dõi -->
+      <div class="step-block" style="animation-delay:.18s">
+        <div class="step-head">
+          <div class="step-badge">Bước 4</div>
+          <div class="step-title">Thêm người theo dõi theo khu vực</div>
+        </div>
+        <div class="step-desc" style="margin-bottom:12px;">
+          Sau khi điền xong thông tin, thêm <strong>HRBP phụ trách</strong> vào danh sách <strong>Người theo dõi</strong> theo đúng khu vực bưu cục:
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">
+          <div style="background:#fff;border:1.5px solid var(--ghn-orange);border-radius:12px;padding:16px 18px;">
+            <div style="font-size:11px;font-weight:700;color:var(--ghn-orange);margin-bottom:8px;letter-spacing:.5px;">📍 LONG AN – TÂY NINH</div>
+            <div style="font-size:12px;color:var(--ghn-text-muted);font-weight:600;margin-bottom:4px;">Thêm người theo dõi:</div>
+            <span class="chip" style="margin:0;">3045604 – Huỳnh Thị Thuỳ Linh</span>
+          </div>
+          <div style="background:#fff;border:1.5px solid var(--ghn-orange);border-radius:12px;padding:16px 18px;">
+            <div style="font-size:11px;font-weight:700;color:var(--ghn-orange);margin-bottom:8px;letter-spacing:.5px;">📍 ĐỒNG NAI – BÌNH PHƯỚC</div>
+            <div style="font-size:12px;color:var(--ghn-text-muted);font-weight:600;margin-bottom:4px;">Thêm người theo dõi:</div>
+            <span class="chip" style="margin:0;">3041836 – Phạm Thị Ánh Giàu</span>
+          </div>
+        </div>
+
+        <div class="note-list" style="margin-top:14px;">
+          <div class="note-list-title">⚠️ Lưu ý</div>
+          <ul>
+            <li>Kiểm tra kỹ <strong>khu vực bưu cục</strong> trước khi thêm người theo dõi để chọn đúng HRBP phụ trách</li>
+            <li>Danh sách người theo dõi đã tự động bao gồm người duyệt và người tạo phiếu</li>
+          </ul>
+        </div>
+      </div>
+
       <!-- Step 4 -->
       <div class="step-block" style="animation-delay:.2s">
         <div class="step-head">
-          <div class="step-badge">Bước 4</div>
+          <div class="step-badge">Bước 5</div>
           <div class="step-title">Hoàn tất và gán vòng duyệt</div>
         </div>
         <div class="step-desc" style="margin-bottom:14px;">
@@ -922,9 +970,9 @@
             <li><strong>HRBP:</strong> 3006537 – Nguyễn Quốc Thái</li>
             <li><strong>NV Phụ trách:</strong> gán theo khu vực bưu cục:
               <ul>
-                <li>Long An – Tây Ninh → <strong>HRBP 3119684 Quang Nhật</strong></li>
-                <li>Bình Phước → <strong>HRBP 3168363 Cẩm Hồng</strong></li>
-                <li>Đồng Nai → <strong>HRBP 3168673 Lệ Nga /3110648 Thanh Hằng /3172144 Phương Uyên</strong></li>
+                <li>Long An – Tây Ninh → <strong>3119684 – Quang Nhật</strong></li>
+                <li>Bình Phước → <strong>3168363 – Cẩm Hồng</strong></li>
+                <li>Đồng Nai → <strong>3168673 – Lệ Nga / 3110648 – Thanh Hằng / 3172144 – Phương Uyên</strong></li>
               </ul>
             </li>
           </ul>
@@ -943,7 +991,7 @@
           <div class="approval-arrow">→</div>
           <div class="approval-node" style="min-width:160px;">
             <div class="role">NV Phụ trách (theo khu vực)</div>
-            <div class="person" style="font-size:11.5px;line-height:1.6;">Long An/TN → Quang Nhật<br>Bình Phước → Cẩm Hồng<br>Đồng Nai → Lệ Nga/Thanh Hằng/Phương Uyên</div>
+            <div class="person" style="font-size:11.5px;line-height:1.6;">Long An/TN → 3119684 Quang Nhật<br>Bình Phước → 3168363 Cẩm Hồng<br>Đồng Nai → 3168673 Lệ Nga / 3110648 Thanh Hằng / 3172144 Phương Uyên</div>
           </div>
         </div>
 
